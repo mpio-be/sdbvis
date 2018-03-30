@@ -11,13 +11,12 @@ Depends:
     sdb,
     stringr,
     magrittr,
-    glue,
-    data.table,
+     data.table,
     anytime
 Imports:
     methods,
     sp,
-    rgeos,
+    rgeos
 Suggests:
     zoo,
     maptools,

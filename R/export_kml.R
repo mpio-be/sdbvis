@@ -2,16 +2,13 @@
 #' @export
 kml.document <- function(title = 'kml_file', body = '#---#') {
 
-    top =HTML( 
-    '<?xml version="1.0" encoding="UTF-8"?>
-    <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:kml="http://www.opengis.net/kml/2.2">')
-    
-    name_and_body =   tagList(tag('name', title) , body) 
-
     tagList(
-        top, 
-        tag('Document', name_and_body )
-     )
+        tag('Document', 
+            tagList(
+                tag('name', title) , 
+                body) 
+         )
+      )
 
  }
 
@@ -38,7 +35,8 @@ kml.placemark.line <- function(color = '#A40000', width =3 , name = 'line1', coo
     Style   = tag('Style', lineSty)
     
     coordinates = tagList(paste(apply(coords, 1, paste, collapse = ','), collapse = '\n'), ''  )
-    LineString = tag('LineString', coordinates)
+    coordinates = tag('coordinates', coordinates)
+    LineString = tag('LineString', list(coordinates) )
 
     tag('Placemark', 
         tagList(
@@ -82,33 +80,38 @@ kml.placemark.points <- function(color = '#4E9A06', scale = 1 , name = 'pt1',
 }
 
 
-
-
-
-
-
-
 #' @title        Export tracks to kml 
 #' @description  Export tracks to kml. Each ID is kept in a separate kml _<Folder>_
 #' @param        A spatial points data.frame
 #' @return       path to kml
 #' @export
 #' @author       MV
+#' @importFrom   htmltools  tag tags tagList HTML
 #' @examples     
 #' \dontrun{
-
+ #   kml()
 #'  }        
 #' 
-kml_save <- function() {
+kml <- function(file = '~/Desktop/temp.kml' ) {
+    return(file)
+    
+    .kmlstart = HTML('<?xml version="1.0" encoding="UTF-8"?>
+    <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:kml="http://www.opengis.net/kml/2.2">')   
 
-    kml.document( body =  
-                    kml.folder('folder1', 
-                       list(
-                       kml.placemark.line (), 
-                       kml.placemark.points()
-                       )
-                    )
+    .body = kml.document( body =  
+                kml.folder('folder1', 
+                   list(
+                   kml.placemark.line (), 
+                   kml.placemark.points()
+                   )
                 )
+            )
+    .kmlstop = HTML('</kml>') 
 
+    o = tagList(.kmlstart, .body , .kmlstop )
+
+
+
+    cat( as.character(o), file = file)
 
  }
