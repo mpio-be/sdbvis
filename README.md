@@ -1,2 +1,2 @@
 # sdbvis
-sdb data visualisation tools.
+sdb data visualization tools.

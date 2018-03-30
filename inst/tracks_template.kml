@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:kml="http://www.opengis.net/kml/2.2">
+	<Document>
+		<name>template.kml</name>
+# ==========================================================================
+#  FOLDER 1
+# ==========================================================================		
+		<Folder>
+			<name>folder_1</name>
+		
+			<Placemark># line 
+		  
+				<Style>
+					<LineStyle>
+						<color>ff1305f9</color>
+						<width>3</width></LineStyle>
+				</Style>
+				<name>path_1</name>
+				
+				<LineString>
+					<coordinates>
+					  -156.6740,71.321  
+					  -156.6577,71.318  
+					  -156.6403,71.322  
+				</coordinates>
+				</LineString>
+			
+			</Placemark>
+			
+			# ----- points -------
+
+			<Placemark>
+				<name>ID_1</name>
+
+				<Style>
+				<IconStyle>
+					<color>#CC0000FF</color>
+					<scale>0.95</scale>
+					<Icon>
+						<href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href>
+					</Icon>
+				</IconStyle>
+
+				<LabelStyle>
+					<scale>0.95</scale>
+				</LabelStyle>
+
+				</Style>
+
+
+				<Point>
+					<coordinates>-156.6740,71.321</coordinates>
+				</Point>
+				<TimeStamp>
+					<when>2018-03-20T01:32:47Z</when>
+				</TimeStamp>
+			</Placemark>
+
+			<Placemark>
+				<name>ID_2</name>
+
+				<Style>
+				<IconStyle>
+					<color>#6816EDFF</color>
+					<scale>0.95</scale>
+					<Icon>
+						<href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href>
+					</Icon>
+				</IconStyle>
+				
+				<LabelStyle>
+					<scale>0.95</scale>
+				</LabelStyle>
+
+				</Style>
+
+
+				<Point>
+					<coordinates>-156.6577,71.318</coordinates>
+				</Point>
+				<TimeStamp>
+					<when>2018-03-20T01:33:47Z</when>
+				</TimeStamp>
+			</Placemark>
+
+			<Placemark>
+				<name>ID_3</name>
+
+
+				<Style>
+				<IconStyle>
+					<color>#F0E00FFF</color>
+					<scale>0.95</scale>
+					<Icon>
+						<href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href>
+					</Icon>
+				</IconStyle>
+				
+				<LabelStyle>
+					<scale>0.95</scale>
+				</LabelStyle>
+
+				</Style>
+
+
+				<Point>
+					<coordinates>-156.6403,71.322</coordinates>
+				</Point>
+				<TimeStamp>
+					<when>2018-03-20T01:34:47Z</when>
+				</TimeStamp>
+			</Placemark>
+
+		</Folder>
+
+
+# ==========================================================================
+#  FOLDER 2
+# ==========================================================================		
+		<Folder>
+			<name>folder_2</name>
+		
+			<Placemark># line 
+		  
+				<Style>
+					<LineStyle>
+						<color>ff1305f9</color>
+						<width>3</width></LineStyle>
+				</Style>
+				<name>path_1</name>
+				
+				<LineString>
+					<coordinates>
+					  -156.6745,71.321,0  
+					  -156.67,71.40,0  
+					  -156.6403,71.322,0  
+				</coordinates>
+				</LineString>
+			
+			</Placemark>
+			
+			# ----- points -------
+
+			<Placemark>
+				<name>ID_1</name>
+
+				<Style>
+				<IconStyle>
+					<color>#CC0000FF</color>
+					<scale>0.95</scale>
+					<Icon>
+						<href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href>
+					</Icon>
+				</IconStyle>
+
+				<LabelStyle>
+					<scale>0.95</scale>
+				</LabelStyle>
+
+				</Style>
+
+
+				<Point>
+					<coordinates>-156.6745,71.321</coordinates>
+				</Point>
+				<TimeStamp>
+					<when>2018-03-20T01:32:47Z</when>
+				</TimeStamp>
+			</Placemark>
+
+			<Placemark>
+				<name>ID_2</name>
+
+				<Style>
+				<IconStyle>
+					<color>#6816EDFF</color>
+					<scale>0.95</scale>
+					<Icon>
+						<href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href>
+					</Icon>
+				</IconStyle>
+				
+				<LabelStyle>
+					<scale>0.95</scale>
+				</LabelStyle>
+
+				</Style>
+
+
+				<Point>
+					<coordinates>-156.67,71.40</coordinates>
+				</Point>
+				<TimeStamp>
+					<when>2018-03-20T01:33:47Z</when>
+				</TimeStamp>
+			</Placemark>
+
+			<Placemark>
+				<name>ID_3</name>
+
+
+				<Style>
+				<IconStyle>
+					<color>#F0E00FFF</color>
+					<scale>0.95</scale>
+					<Icon>
+						<href>http://maps.google.com/mapfiles/kml/pal2/icon18.png</href>
+					</Icon>
+				</IconStyle>
+				
+				<LabelStyle>
+					<scale>0.95</scale>
+				</LabelStyle>
+
+				</Style>
+
+
+				<Point>
+					<coordinates>-156.6403,71.322</coordinates>
+				</Point>
+				<TimeStamp>
+					<when>2018-03-20T01:34:47Z</when>
+				</TimeStamp>
+			</Placemark>
+
+		</Folder>
+
+	</Document>
+</kml>
