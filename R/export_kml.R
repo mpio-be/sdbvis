@@ -115,9 +115,6 @@ build.kml.folders <- function(d, id = ~ id, width = 3, scale =1,
 }
 
 
-
-
-
 #' @title        Export tracks to kml 
 #' @description  Export tracks to kml. Each ID is kept in a separate kml _<Folder>_
 #' @param        A spatial points data.frame
