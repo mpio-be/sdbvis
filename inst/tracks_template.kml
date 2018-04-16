@@ -2,13 +2,13 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:kml="http://www.opengis.net/kml/2.2">
 	<Document>
 		<name>template.kml</name>
-# ==========================================================================
-#  FOLDER 1
-# ==========================================================================		
+
+<!-- FOLDER 1 -->
+
 		<Folder>
 			<name>folder_1</name>
 		
-			<Placemark># line 
+			<Placemark>   <!-- line  -->
 		  
 				<Style>
 					<LineStyle>
@@ -28,7 +28,7 @@
 			
 			</Placemark>
 			
-			# ----- points -------
+			 <!-- points --> 
 
 			<Placemark>
 				<name>ID_1</name>
@@ -114,14 +114,11 @@
 
 		</Folder>
 
-
-# ==========================================================================
-#  FOLDER 2
-# ==========================================================================		
-		<Folder>
+<!-- FOLDER 2 -->
+	<Folder>
 			<name>folder_2</name>
 		
-			<Placemark># line 
+			<Placemark>  <!-- line --> 
 		  
 				<Style>
 					<LineStyle>
@@ -140,7 +137,7 @@
 			
 			</Placemark>
 			
-			# ----- points -------
+			<!-- points -->
 
 			<Placemark>
 				<name>ID_1</name>

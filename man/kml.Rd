@@ -4,9 +4,11 @@
 \alias{kml}
 \title{Export tracks to kml}
 \usage{
-kml(file = "~/Desktop/temp.kml")
+kml(file = "~/Desktop/temp.kml", ...)
 }
 \arguments{
+\item{...}{goes to build.kml.folders}
+
 \item{A}{spatial points data.frame}
 }
 \value{
@@ -18,6 +20,7 @@ Export tracks to kml. Each ID is kept in a separate kml _<Folder>_
 \examples{
     
 \dontrun{
+kml(dat = randomTracks() )
  }        
 
 }

@@ -11,8 +11,9 @@ Depends:
     sdb,
     stringr,
     magrittr,
-     data.table,
-    anytime
+    data.table,
+    anytime,
+    foreach
 Imports:
     methods,
     sp,

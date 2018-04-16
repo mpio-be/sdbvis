@@ -1,4 +1,5 @@
 #' @export
+#' @rdname build.kml.folders
 hexBinary <- function(col =  "#A40000") {
 
     # https://developers.google.com/kml/documentation/kmlreference#colorstyle
@@ -13,6 +14,7 @@ hexBinary <- function(col =  "#A40000") {
 
 
 #' @export
+#' @rdname build.kml.folders 
 kml.document <- function(title = 'kml_file', body = '#---#') {
 
     tagList(
@@ -26,6 +28,7 @@ kml.document <- function(title = 'kml_file', body = '#---#') {
  }
 
 #' @export
+#' @rdname build.kml.folders
 kml.folder<- function(name = 'folder_1', body = '#---#') {
     tagList(
          tag('Folder', 
@@ -38,6 +41,7 @@ kml.folder<- function(name = 'folder_1', body = '#---#') {
  }
 
 #' @export
+#' @rdname build.kml.folders 
 kml.placemark.line <- function(color = '#A40000', width =3 , name = 'line1', 
     coords = cbind(c(24.71, 24.71, 24.73), c(45.59,45.61,45.60) ) ) {
     
@@ -64,6 +68,7 @@ kml.placemark.line <- function(color = '#A40000', width =3 , name = 'line1',
 
 
 #' @export
+#' @rdname build.kml.folders 
 kml.placemark.points <- function(color = '#4E9A06', scale = 1 , name = 'pt1', 
     icon = 'http://maps.google.com/mapfiles/kml/pal2/icon18.png' , coords = c(24.71, 45.59), datetime = Sys.time() ) {
     
@@ -80,73 +85,82 @@ kml.placemark.points <- function(color = '#4E9A06', scale = 1 , name = 'pt1',
     coordinates = tag('coordinates', paste(coords, collapse = ',' ) )
     point   = tag('Point', list(coordinates))
 
-    timest = tag('TimeStamp',  format(datetime, "%Y-%m-%dT%H:%M:%SZ") )
+    timest =  tag('TimeStamp', list(
+                tag('when',  format(datetime, "%Y-%m-%dT%H:%M:%SZ") )
+                ) )
 
 
     tag('Placemark', 
         tagList(
             nam,    
             Style,
-            point
+            point,
+            timest
            ) 
         )
 
-}
+ }
 
-
+#'  kml building blocks
+#' @description builds kml folders using kml building blocks
+#' @param dat a data.table containing id, datetime_, lat, lon
+#' @param  width line width
+#' @param  scale symbol scale
+#' @param  colfun  a function , default to scales::col_factor()
+#' @notes  for now dat is hardwired but this will change 
+#' (dat should be a proper spacetime object or it should take id, datetime_, lat, lon as arguments)
 #' @export
 #' @importFrom scales col_factor
 #' @examples
-#' d = randomTracks()
+#' x = randomTracks() %>% build.kml.folders
 #' 
-build.kml.folders <- function(d, id = ~ id, width = 3, scale =1, 
-                    colfun =  col_factor("Paired", NULL)  ) {
+build.kml.folders <- function(dat, width = 3 , scale = 1 ,  colfun =  col_factor("Paired", NULL)  ) {
+ 
+    dat[, cols := colfun(id) ]
+    dat[, k := 1:.N, by = id]
 
- d[, cols := colfun(substitute(id))]
+    dl = split(dat, dat$id)
 
- d[, folder := kml.folder(substitute(id)[1], 
-                   list(
-                   kml.placemark.line(width = width), 
-                   kml.placemark.points(color = cols)
-                   )
-                ) , by = substitute(id)]
+    foreach(i = dl) %do% {
 
-    
-}
+        POINTS = i[, .(P = 
+            list(kml.placemark.points(color = cols, scale = scale, name = k, coords = c(lon, lat), datetime = datetime_) ) ), 
+        by = k]$P %>% tagList
+            
+        LINE = kml.placemark.line(color= i$cols[1], width = width, name = paste0('track_', i$id[1]), coords = i[,.(lon, lat)] )
+
+        kml.folder(paste0('ID_', i$id[1]), 
+            list(
+            POINTS,
+            LINE)
+            )
+     }
+
+  }
 
 
 #' @title        Export tracks to kml 
 #' @description  Export tracks to kml. Each ID is kept in a separate kml _<Folder>_
 #' @param        A spatial points data.frame
+#' @param        ... goes to build.kml.folders
 #' @return       path to kml
 #' @export
 #' @author       MV
 #' @importFrom   htmltools  tag tags tagList HTML
 #' @examples     
 #' \dontrun{
- #   kml()
+#' kml(dat = randomTracks() )
 #'  }        
 #' 
-kml <- function(file = '~/Desktop/temp.kml' ) {
+kml <- function(file = '~/Desktop/temp.kml', ... ) {
     
     .kmlstart = HTML('<?xml version="1.0" encoding="UTF-8"?>
-    <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:kml="http://www.opengis.net/kml/2.2">')   
-
-    .body = kml.document( body =  
-                
-                kml.folder('folder1', 
-                   list(
-                   kml.placemark.line (), 
-                   kml.placemark.points()
-                   )
-                )
-            )
+        <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:kml="http://www.opengis.net/kml/2.2">')   
+    .body = kml.document( body = build.kml.folders(...) )
     .kmlstop = HTML('</kml>') 
 
     o = tagList( .kmlstart, .body , .kmlstop )
-    print(o)
-
-    
+   
     cat( as.character(o), file = file)
     file    
  }
