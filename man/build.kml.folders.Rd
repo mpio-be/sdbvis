@@ -37,6 +37,10 @@ build.kml.folders(dat, width = 3, scale = 1, colfun = col_factor("Paired",
 \description{
 builds kml folders using kml building blocks
 }
+\note{
+for now dat is hardwired but this will change 
+(dat should be a proper spacetime object or it should take id, datetime_, lat, lon as arguments)
+}
 \examples{
 x = randomTracks() \%>\% build.kml.folders
 

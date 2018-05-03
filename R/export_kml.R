@@ -107,7 +107,7 @@ kml.placemark.points <- function(color = '#4E9A06', scale = 1 , name = 'pt1',
 #' @param  width line width
 #' @param  scale symbol scale
 #' @param  colfun  a function , default to scales::col_factor()
-#' @notes  for now dat is hardwired but this will change 
+#' @note  for now dat is hardwired but this will change 
 #' (dat should be a proper spacetime object or it should take id, datetime_, lat, lon as arguments)
 #' @export
 #' @importFrom scales col_factor
