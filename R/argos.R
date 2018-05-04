@@ -1,3 +1,12 @@
+#' @export
+argos2SpatialLines <- function(x)  {
+  
+  o = x[,  list( list(sp::Line(cbind(longitude, latitude))) )  , by = tagID]
+
+  sp::SpatialLines( list( sp::Lines(o$V1, '1') ) )
+  
+  }
+
 
 #' @title        argoSpeed  
 #' @description  argos speed along a track
@@ -20,9 +29,7 @@ argoSpeed <- function(x) {
     x[, speed := dist/timeDiff]
     x[, ':=' (latitude2 = NULL, longitude2 = NULL, locationDate2 = NULL )]
     x
-
-
-}
+ }
 
 
 
@@ -34,16 +41,16 @@ argoSpeed <- function(x) {
 #' @param        tab table name containing the data. should have tagID, locationDate,latitude, longitude
 #' @return       data.table
 #' @export
-#' @importFrom trip trip 
+#' @importFrom anytime anytime 
 #' @author       MV
 #' @examples     
 #' \dontrun{
+#' 
 #' con = dbConnect(RSQLite::SQLite(), '~/argoSoap_scinam.sqlite' ) 
 #' x =get_argos(con)
 #'  }        
 #' 
 get_argos <- function(con, tab = 'argos') {
-
     x = dbGetQuery(con, paste('select * from ', tab)) %>% data.table
     x[, locationDate := anytime(locationDate)]
     argoSpeed(x)

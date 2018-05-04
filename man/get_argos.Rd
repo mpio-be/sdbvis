@@ -20,6 +20,7 @@ loads argos data.
 \examples{
     
 \dontrun{
+
 con = dbConnect(RSQLite::SQLite(), '~/argoSoap_scinam.sqlite' ) 
 x =get_argos(con)
  }        

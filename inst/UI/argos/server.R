@@ -3,49 +3,43 @@
 
 shinyServer(function(input, output, session) {
 
-  output$dbtable <- renderUI({
-      selectInput("table", "Table", db_structure[db == input$db ]$table ,  multiple = FALSE)
-     })
+  autoInvalidate <- reactiveTimer(1000*60*15) 
 
-  output$tagID <- renderUI({
-    selectInput("tagID", "Bird ID", db_structure[db == input$db & table == input$table ]$tagID ,  multiple = FALSE)
-    })
-
-
-  filteredData <- reactive({
-    x = try( locationTags_data(input$tagID, user = user, host = host), silent =TRUE)
-    if(inherits(x,  "try-error")) x = data.table(tagID = c(0,0), latitude = c(47.9, 48), longitude = c(11.22, 11.23), datetime_ = Sys.time() )
-
-    x[, col := colorRampPalette(brewer.pal(11,"Spectral")[11:1]  )(.N) ]
-
-  })
 
   output$map <- renderLeaflet({
     leaflet()
   })
 
-  # Incremental changes to the map should be performed in an observer with leafletProxy()
 
   observe({
 
-    d = filteredData()
+    autoInvalidate()
+
+    con = dbConnect(RSQLite::SQLite(), '~/argoSoap_scinam.sqlite' ) 
+    d =get_argos(con)
+    dbDisconnect(con)
+    d = d[speed < 150 & locationDate > as.POSIXct('2018-04-26 16:00:00')]
+    d[, col := factor(tagID, labels = cols[1:length(unique(tagID))])]
+
+
     midloc  = d[, .(lng = median(longitude), lat= median(latitude))]
-    lastpop = paste0('Last location:', d[.N]$datetime_,'<br> ','Time recorded:', difftime(d[.N]$datetime_ ,d[1]$datetime_) %>% round,' days' )
+    
+    lastpop = Sys.time()
 
 
-    leafletProxy("map") %>%
+    leafletProxy("map", data = argos2SpatialLines(d) ) %>%
 
-    #clearBounds() %>%
     setView(midloc$lng, midloc$lat, zoom = 4) %>%
 
     addTiles(urlTemplate   = leafletBaseMap(input$mapID)$http) %>%
 
-    clearMarkers()%>%
-    addCircleMarkers(lng = d$longitude, lat = d$latitude , radius = 4, color = d$col, weight = 1, opacity = 0.6, fillColor = d$col, fillOpacity = 0.6, popup  = d$datetime_) %>%
+    clearMarkers() %>%
+    addPolylines() %>%
+    addCircleMarkers(lng = d$longitude, lat = d$latitude , radius = 5, color = d$col, weight = 1,  
+                    opacity = 0.8, fillColor = d$col, fillOpacity = 0.8, 
+                    popup  = paste(d$tagID, paste0('class=',d$locationClass), d$locationDate, sep = '<br>') )
 
-    clearPopups() %>%
-    addPopups( lng = d[.N,longitude], lat = d[.N,latitude],  popup = lastpop )
-
+   
 
   })
 
