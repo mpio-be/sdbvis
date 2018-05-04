@@ -1,6 +1,6 @@
 Package: sdbvis
 Title: Sdb package extensions
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: person("Mihai", "Valcu", email = "valcu@orn.mpg.de", role = c("aut", "cre"))
 Description: Sdb package extensions.
 Depends:
