@@ -24,7 +24,8 @@ Suggests:
     sdb,
     zoo,
     maptools,
-    leaflet
+    leaflet,
+    miniUI
 Remotes:
     mpio-be/sdb  
 VignetteBuilder: knitr

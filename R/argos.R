@@ -1,10 +1,24 @@
+#' Data contains last location
 #' @export
-argos2SpatialLines <- function(x)  {
-  
-  o = x[,  list( list(sp::Line(cbind(longitude, latitude))) )  , by = tagID]
+argos2SpatialLinesDataFrame<- function(x)  {
 
-  sp::SpatialLines( list( sp::Lines(o$V1, '1') ) )
-  
+  o = x[, .(spLines = list (list( sp::Line(cbind(longitude, latitude)) ) )) , by = tagID]
+  o[, spLines := list ( list( sp::Lines( spLines[[1]], ID = tagID) ) ) , by = tagID]
+  o[, spLines := list ( list( sp::SpatialLines( spLines[1] ) ) ) , by = tagID]
+
+
+  x[, maxd := max(locationDate) , by = tagID]
+  dat = x[maxd == locationDate][, maxd := NULL]
+
+  o = merge(o, dat , by = 'tagID')
+
+  o[, spLines :=  list( list(sp::SpatialLinesDataFrame(spLines[[1]], 
+    data = data.frame( tagID, latitude, longitude, locationDate, row.names = tagID)) ) ) , by = tagID ]
+
+  do.call(rbind, o$spLines)
+
+
+
   }
 
 
