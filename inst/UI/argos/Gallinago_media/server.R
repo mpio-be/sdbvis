@@ -7,7 +7,9 @@ shinyServer(function(input, output, session) {
 
   autoInvalidate <- reactiveTimer(1000*60*15) 
 
-
+  activeData <- reactive({
+      GMdata(tagID = input$tagID)
+  })
 
 
   output$map <- renderLeaflet({
@@ -20,18 +22,11 @@ shinyServer(function(input, output, session) {
     autoInvalidate()
 
     # DATA 
-    con = dbConnect(RSQLite::SQLite(), '~/argoSoap_scinam.sqlite' ) 
-    X =get_argos(con)
-    dbDisconnect(con)
-    X = X[speed < 150 & locationDate > as.POSIXct('2018-04-26 16:00:00')]
-    X = merge(X, ptt, by = 'tagID')
-    X[, pp := paste(tagID, paste0('class=',locationClass), paste0('lat=',latitude), paste0('lon=',longitude), locationDate, sep = '<br>') ]
+    A = activeData()
+    X = A[[1]]
+    LL = A[[2]]
 
     midloc  = X[, .(lng = median(longitude), lat= median(latitude))]
-
-    LL  = argos2SpatialLinesDataFrame(X)
-    LL$pp = paste( paste(LL$tagID, 'last location'), paste0('lat=',LL$latitude), paste0('lon=',LL$longitude), LL$locationDate, sep = '<br>')
-
 
         
     # MAP
@@ -41,7 +36,8 @@ shinyServer(function(input, output, session) {
       clearMarkers() %>%
       clearShapes() %>%
       addPolylines(data = LL , weight = 2, color = "black", popup  = LL$pp) %>%
-      addCircleMarkers(data = X , lng = X$longitude, lat = X$latitude , radius = 5, color = X$col, weight = 1,  
+      addCircleMarkers(data = X , lng = X$longitude, lat = X$latitude , radius = 5, 
+        color = X$col, weight = 1,  
           opacity = 0.8, fillColor = X$col, fillOpacity = 0.4, popup  = X$pp ) 
 
 

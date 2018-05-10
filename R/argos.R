@@ -64,8 +64,17 @@ argoSpeed <- function(x) {
 #' x =get_argos(con)
 #'  }        
 #' 
-get_argos <- function(con, tab = 'argos') {
-    x = dbGetQuery(con, paste('select * from ', tab)) %>% data.table
+get_argos <- function(con, tab = 'argos', tagID = 'ALL') {
+    
+    sql = paste('select * from ', tab)
+    if(tagID != 'ALL')
+      sql = paste(sql, 'where tagID = ', tagID)
+
+    x = dbGetQuery(con, sql) %>% data.table
+    if(nrow(x) < 2) # no lines possible
+     x = dbGetQuery(con, paste('select * from ', tab)) %>% data.table 
+    
+
     x[, locationDate := anytime(locationDate)]
     argoSpeed(x)
     x
