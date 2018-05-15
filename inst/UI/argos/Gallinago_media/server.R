@@ -5,23 +5,31 @@ shinyServer(function(input, output, session) {
   
   observe( on.exit( assign('input', reactiveValuesToList(input) , envir = .GlobalEnv)) )
 
-  autoInvalidate <- reactiveTimer(1000*60*15) 
+  activeData <- reactivePoll(10000,session,
+      
+      checkFunc = function() {
+        dbq(user = 'mihai', host = '127.0.0.1', 
+          q = paste('select count(*) from', paste(db,view,sep = '.' )) )
+      },
 
-  activeData <- reactive({
-      GMdata(tagID = input$tagID)
-  })
+      valueFunc  = function()  { 
+        GMdata(tagID = input$tagID)
+      }
+  
+
+
+  )
 
 
   output$map <- renderLeaflet({
-    leaflet()
+    leaflet() 
+
   })
 
 
   observe({
 
-    autoInvalidate()
-
-    # DATA 
+   # DATA 
     A = activeData()
     X = A[[1]]
     LL = A[[2]]
@@ -31,14 +39,20 @@ shinyServer(function(input, output, session) {
         
     # MAP
       leafletProxy("map") %>%
+      
       setView(midloc$lng, midloc$lat, zoom = 4) %>%
       addTiles(urlTemplate   = leafletBaseMap(input$mapID)$http) %>%
       clearMarkers() %>%
       clearShapes() %>%
+
+      addPolygons(data = brange, color = '#a51d88', weight = .5, fillOpacity = 0.2) %>% 
+      
       addPolylines(data = LL , weight = 2, color = "black", popup  = LL$pp) %>%
+      
       addCircleMarkers(data = X , lng = X$longitude, lat = X$latitude , radius = 5, 
         color = X$col, weight = 1,  
           opacity = 0.8, fillColor = X$col, fillOpacity = 0.4, popup  = X$pp ) 
+
 
 
 

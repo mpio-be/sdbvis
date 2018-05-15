@@ -4,7 +4,7 @@
 \alias{get_argos}
 \title{get_argos}
 \usage{
-get_argos(con, tab = "argos")
+get_argos(con, tab = "argos", tagID = "ALL")
 }
 \arguments{
 \item{con}{db connection}

@@ -4,7 +4,7 @@ gadgetTitleBar("",
     right= selectInput('mapID', NA, leafletBaseMap()$type  , leafletBaseMap('Satellite')$type),
     left = div(class="form-inline",
             strong('PTT:'), 
-            selectInput('tagID', NA,  c( 'ALL', ptt$tagID) , multiple = FALSE) )
+            selectInput('tagID', NA,  c( 'ALL', ptt) , multiple = FALSE) )
 
     ),
  

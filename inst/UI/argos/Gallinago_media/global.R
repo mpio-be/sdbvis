@@ -1,25 +1,29 @@
 
-#  shiny::runApp('inst/UI/argos/Gallinago_media', launch.browser = TRUE)
+#  shiny::runApp('inst/UI/argos/Gallinago_media', launch.browser = TRUE, port = 1111)
 
 
-    invisible( sapply(c('leaflet', 'sdbvis', 'miniUI'), function(x) 
+    invisible( sapply(c('sdbvis', 'leaflet', 'miniUI'), function(x) 
     suppressPackageStartupMessages(
     require(x , character.only = TRUE, quietly = TRUE) ) ) )
 
+    ptt = dbq(user = 'mihai', host = '127.0.0.1', q = 'select PTT from GRSNatPOLAND.CAPTURES')$PTT
 
-    ptt = fread(system.file('UI', 'argos', 'Gallinago_media', 'ptts.txt', package = 'sdbvis'))
-    ptt[Sex == 'M', col := 'red']
-    ptt[Sex == 'F', col := 'blue']
+    brange = rgdal::readOGR( system.file('UI', 'argos', 'Gallinago_media', 'brange.kml', package = 'sdbvis'), verbose = FALSE)
+
+    
+    db = 'ARGOS'
+    view = 'GRSN'
 
 
-    GMdata <- function(file = '~/argoSoap_scinam.sqlite', tagID) {
-        con = dbConnect(RSQLite::SQLite(), file) 
-        X =get_argos(con, tagID = tagID)
+    GMdata <- function(tagID = 'ALL') {
+        con = dbcon('mihai', host = '127.0.0.1') 
+        X = get_argos(con, tagID = tagID, tab = paste(db,view,sep = '.' ) )
         dbDisconnect(con)
 
+        X[Sex == 'M', col := 'red']
+        X[Sex == 'F', col := 'blue']
 
-        X = X[speed < 150 & locationDate > as.POSIXct('2018-04-26 16:00:00')]
-        X = merge(X, ptt, by = 'tagID')
+        X = X[speed < 150]
         X[, pp := paste(tagID, paste0('class=',locationClass), paste0('lat=',latitude), paste0('lon=',longitude), locationDate, sep = '<br>') ]
 
         LL  = argos2SpatialLinesDataFrame(X)
