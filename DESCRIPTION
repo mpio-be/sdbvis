@@ -19,7 +19,8 @@ Imports:
     sp,
     rgdal,
     rgeos,
-    RSQLite
+    RSQLite,
+    geosphere
 Suggests:
     sdb,
     zoo,
