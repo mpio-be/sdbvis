@@ -18,10 +18,9 @@ path to kml
 Export tracks to kml. Each ID is kept in a separate kml _<Folder>_
 }
 \examples{
-    
 \dontrun{
 kml(dat = randomTracks() )
- }        
+ }
 
 }
 \author{

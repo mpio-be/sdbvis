@@ -22,8 +22,8 @@ kml.placemark.points(color = "#4E9A06", scale = 1, name = "pt1",
   icon = "http://maps.google.com/mapfiles/kml/pal2/icon18.png",
   coords = c(24.71, 45.59), datetime = Sys.time())
 
-build.kml.folders(dat, width = 3, scale = 1, colfun = col_factor("Paired",
-  NULL))
+build.kml.folders(dat, width = 3, scale = 1,
+  colfun = col_factor("Paired", NULL))
 }
 \arguments{
 \item{width}{line width}
@@ -38,7 +38,7 @@ build.kml.folders(dat, width = 3, scale = 1, colfun = col_factor("Paired",
 builds kml folders using kml building blocks
 }
 \note{
-for now dat is hardwired but this will change 
+for now dat is hardwired but this will change
 (dat should be a proper spacetime object or it should take id, datetime_, lat, lon as arguments)
 }
 \examples{
