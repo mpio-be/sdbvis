@@ -121,6 +121,7 @@ build.kml.folders <- function(dat, width = 3 , scale = 1 ,  colfun =  col_factor
 
     dat[, cols := colfun(id) ]
     dat[, k := 1:.N, by = id]
+    dat[, k := paste(id, k, sep = '_')]
 
     dl = split(dat, dat$id)
 
